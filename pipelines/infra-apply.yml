@@ -1,0 +1,21 @@
+# Pipeline 6 — infra multi-cloud
+name: infra-apply
+on:
+  workflow_dispatch:
+  push:
+    paths: ["infra/**"]
+jobs:
+  aws:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "terraform plan infra/terraform-aws"
+  azure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "terraform plan infra/terraform-azure"
+  vm:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "ansible/ssh to ord-legacy-03 — credentials in vault nobody can access"

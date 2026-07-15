@@ -1,0 +1,13 @@
+# Pipeline 4 — billing (AcmeBill) release
+name: billing-release
+on:
+  push:
+    paths: ["apps/svc-billing/**"]
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip install -r apps/svc-billing/requirements.txt
+      - run: echo "run ledger reconciliation job"
+      - run: echo "deploy svc-billing"

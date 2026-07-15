@@ -1,0 +1,44 @@
+version: "3.8"
+# Local hybrid stack — Java 8 monolith/billing/tax + Node inventory/notify
+services:
+  monolith-core:
+    build:
+      context: .
+      dockerfile: apps/monolith-core/Dockerfile
+    ports: ["8080:8080"]
+    environment:
+      INVENTORY_BASE_URL: http://svc-inventory:3001
+      BILLING_BASE_URL: http://svc-billing:5001
+      NOTIFY_BASE_URL: http://svc-notify:3002
+  svc-inventory:
+    build: ./apps/svc-inventory
+    ports: ["3001:3001"]
+    environment:
+      MONOLITH_URL: http://monolith-core:8080
+  svc-billing:
+    build:
+      context: .
+      dockerfile: apps/svc-billing/Dockerfile
+    ports: ["5001:5001"]
+    environment:
+      MONOLITH_URL: http://monolith-core:8080
+      INVENTORY_URL: http://svc-inventory:3001
+  svc-notify:
+    build: ./apps/svc-notify
+    ports: ["3002:3002"]
+  svc-tax:
+    build:
+      context: .
+      dockerfile: apps/svc-tax/Dockerfile
+    ports: ["5002:5002"]
+  legacy-portal:
+    image: nginx:1.20
+    ports: ["8088:80"]
+    volumes:
+      - ./apps/legacy-portal:/usr/share/nginx/html:ro
+  modern-portal:
+    image: nginx:1.20
+    ports: ["8089:80"]
+    volumes:
+      - ./apps/modern-portal/public:/usr/share/nginx/html:ro
+      - ./apps/modern-portal/src:/usr/share/nginx/src:ro

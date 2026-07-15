@@ -1,0 +1,17 @@
+# Pipeline 2 — emergency hotfix
+name: hotfix-p1
+on:
+  workflow_dispatch:
+    inputs:
+      ticket:
+        description: P1 ticket
+        required: true
+jobs:
+  hotfix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Fast-track build
+        run: echo "skipping full regression — tribal risk"
+      - name: Deploy all regions
+        run: echo "SLA 4h P1 hotfix"

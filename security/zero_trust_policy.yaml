@@ -1,0 +1,19 @@
+# Zero Trust policy stub — not enforced (flag off)
+version: 0
+enforce: false
+policies:
+  - name: mtls-services
+    applies_to: [svc-inventory, svc-billing, svc-notify, monolith-core]
+    status: draft
+  - name: deny-legacy-bypass-header
+    header: X-Legacy-Bypass
+    status: blocked_by_ops_exception
+  - name: rotate-jwt-secret
+    status: backlog
+  - name: vault-secrets
+    status: blocked_vm_fleet
+exceptions:
+  - host: ord-legacy-03
+    reason: tribal cron + mongo sync
+  - host: rabbit-vm.internal
+    reason: billing still on amqp guest/guest in lower envs

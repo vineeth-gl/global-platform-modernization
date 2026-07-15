@@ -1,0 +1,23 @@
+# Pipeline 1 — monolith weekly release
+name: monolith-weekly
+on:
+  schedule:
+    - cron: "0 18 * * 2" # Tue 18:00 UTC canary
+  workflow_dispatch:
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: echo "docker build apps/monolith-core"
+      - name: Deploy canary eu-west
+        run: echo "kubectl apply -f infra/k8s/ && set image canary"
+      - name: Feature flag check
+        run: echo "ensure bill_v2_cutover eu-west=true us-east=false"
+  promote-blue-green:
+    needs: canary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Flip ingress to green
+        run: echo "blue-green cutover Wed"

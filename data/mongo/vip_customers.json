@@ -1,0 +1,18 @@
+// Mongo VIP customers collection shape
+{
+  "collection": "vip_customers",
+  "indexes": ["email", "id"],
+  "sample": {
+    "id": "C-VIP01",
+    "email": "vip@example.com",
+    "name": "VIP User",
+    "country": "DE",
+    "vip": true,
+    "source": "mongo",
+    "notes": "Not synced to SQL — tribal knowledge"
+  },
+  "order_shadows": {
+    "description": "Dual-write from unfinished migration",
+    "fields": ["id", "status", "total", "region"]
+  }
+}

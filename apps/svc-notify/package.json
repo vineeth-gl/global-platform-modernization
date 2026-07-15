@@ -1,0 +1,13 @@
+{
+  "name": "svc-notify",
+  "version": "2.0.1",
+  "description": "Notification service — Kafka + RabbitMQ dual publish (compat hell)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "4.17.1",
+    "body-parser": "1.19.0"
+  }
+}

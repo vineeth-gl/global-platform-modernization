@@ -1,0 +1,12 @@
+{
+  "name": "modern-portal",
+  "version": "0.4.2",
+  "private": true,
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "scripts": {
+    "start": "echo Use any static server; open public/index.html after bundling, or run via CDN demo in public/"
+  }
+}

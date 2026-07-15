@@ -1,0 +1,10 @@
+body { font-family: Tahoma, Verdana, sans-serif; background: #e8e8e8; margin: 0; }
+#banner { background: #1a3a5c; color: #fff; padding: 12px 20px; }
+#banner h1 { margin: 0; font-size: 20px; display: inline; }
+.muted { margin-left: 16px; font-size: 12px; opacity: 0.8; }
+#tabs { margin: 16px; background: #fff; padding: 8px; border: 1px solid #ccc; }
+table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+th, td { border: 1px solid #bbb; padding: 6px; text-align: left; font-size: 13px; }
+button { margin-right: 6px; }
+label { display: block; margin: 6px 0; }
+#cat-results .item { padding: 4px; border-bottom: 1px dotted #aaa; }

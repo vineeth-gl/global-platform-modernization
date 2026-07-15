@@ -1,0 +1,14 @@
+{
+  "bill_v2_cutover": {
+    "us-east": false,
+    "eu-west": true,
+    "ap-south": false,
+    "default": false
+  },
+  "react_portal_only": { "default": false },
+  "kafka_notify": { "default": true },
+  "rabbit_compat": { "default": true },
+  "zero_trust_enforce": { "default": false },
+  "canary_inventory": { "default": false },
+  "blue_green_monolith": { "default": true }
+}

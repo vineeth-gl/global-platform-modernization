@@ -1,0 +1,22 @@
+# Multi-region status page stub
+regions:
+  - id: us-east
+    cloud: aws
+    deploy: kubernetes
+    sla: 99.95
+  - id: eu-west
+    cloud: azure
+    deploy: k8s+vm
+    sla: 99.95
+  - id: ap-south
+    cloud: aws
+    deploy: vm
+    sla: 99.9
+support:
+  model: follow-the-sun
+  pods: [AMER, EMEA, APAC]
+  countries: 36
+release:
+  weekly: true
+  hotfix: true
+  strategies: [feature-flags, canary, blue-green]

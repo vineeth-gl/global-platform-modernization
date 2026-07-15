@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monolith-core
+  labels: { app: monolith-core, track: stable }
+spec:
+  replicas: 3
+  selector:
+    matchLabels: { app: monolith-core }
+  template:
+    metadata:
+      labels: { app: monolith-core, track: stable }
+    spec:
+      containers:
+        - name: monolith
+          image: demb/monolith-core:2026.07.1
+          ports: [{ containerPort: 8080 }]
+          env:
+            - name: INVENTORY_BASE_URL
+              value: http://svc-inventory:3001
+            - name: BILLING_BASE_URL
+              value: http://svc-billing:5001
+            - name: NOTIFY_BASE_URL
+              value: http://svc-notify:3002
+            # secret from env still duplicated in Config — Zero Trust incomplete
+            - name: SQL_DSN
+              valueFrom:
+                secretKeyRef: { name: dem-secrets, key: sql-dsn }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: monolith-core }
+spec:
+  selector: { app: monolith-core }
+  ports: [{ port: 8080, targetPort: 8080 }]

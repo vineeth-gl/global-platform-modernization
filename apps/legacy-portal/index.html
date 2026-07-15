@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DEMb Legacy Portal — ShopForge UI</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css" />
+  <link rel="stylesheet" href="static/css/legacy.css" />
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+  <div id="banner">
+    <h1>ShopForge Operations Console</h1>
+    <span class="muted">Legacy UI — do not remove until React cutover (ticket since 2020)</span>
+  </div>
+  <div id="tabs">
+    <ul>
+      <li><a href="#tab-orders">Orders</a></li>
+      <li><a href="#tab-customers">Customers</a></li>
+      <li><a href="#tab-catalog">Catalog</a></li>
+    </ul>
+    <div id="tab-orders">
+      <button id="btn-refresh-orders">Refresh</button>
+      <button id="btn-create-order">New Order</button>
+      <table id="orders-table">
+        <thead><tr><th>ID</th><th>Status</th><th>Total</th><th>Region</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="tab-customers">
+      <input id="cust-q" placeholder="search..." />
+      <button id="btn-search-cust">Search</button>
+      <ul id="cust-list"></ul>
+    </div>
+    <div id="tab-catalog">
+      <input id="cat-q" placeholder="product..." />
+      <button id="btn-search-cat">Search</button>
+      <div id="cat-results"></div>
+    </div>
+  </div>
+  <div id="dialog-order" title="Create Order">
+    <label>Customer ID <input id="ord-cust" value="C-1001" /></label>
+    <label>SKU <input id="ord-sku" value="SKU-100" /></label>
+    <label>Qty <input id="ord-qty" value="1" /></label>
+    <label>Email <input id="ord-email" value="buyer@example.com" /></label>
+  </div>
+  <script src="static/js/api.js"></script>
+  <script src="static/js/orders.js"></script>
+  <script src="static/js/customers.js"></script>
+  <script src="static/js/extras.js"></script>
+  <script src="static/js/cart.js"></script>
+  <script src="static/js/app.js"></script>
+</body>
+</html>

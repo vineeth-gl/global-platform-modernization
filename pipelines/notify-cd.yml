@@ -1,0 +1,12 @@
+# Pipeline 5 — notify / messaging
+name: notify-cd
+on:
+  push:
+    paths: ["apps/svc-notify/**"]
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd apps/svc-notify && npm ci
+      - run: echo "verify kafka + rabbit dual publish still required"

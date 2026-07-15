@@ -1,0 +1,34 @@
+# Blue-green style services for monolith zero-downtime releases
+apiVersion: v1
+kind: Service
+metadata:
+  name: monolith-blue
+spec:
+  selector: { app: monolith-core, color: blue }
+  ports: [{ port: 8080 }]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monolith-green
+spec:
+  selector: { app: monolith-core, color: green }
+  ports: [{ port: 8080 }]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: monolith-active
+  annotations:
+    demb.io/release-strategy: blue-green
+spec:
+  rules:
+    - host: api.dem.example
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: monolith-blue
+                port: { number: 8080 }

@@ -1,0 +1,15 @@
+{
+  "name": "svc-inventory",
+  "version": "1.8.4",
+  "description": "Inventory microservice (ShopForge split 2019) — tightly coupled to monolith",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "canary": "NODE_ENV=canary node server.js"
+  },
+  "dependencies": {
+    "express": "4.17.1",
+    "body-parser": "1.19.0",
+    "axios": "0.21.1"
+  }
+}

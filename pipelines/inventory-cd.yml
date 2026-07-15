@@ -1,0 +1,13 @@
+# Pipeline 3 — inventory continuous deploy
+name: inventory-cd
+on:
+  push:
+    paths: ["apps/svc-inventory/**"]
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd apps/svc-inventory && npm ci && npm test --if-present
+      - run: echo "canary 10% traffic then full"
+      - run: echo "kubectl apply -f infra/k8s/inventory-canary.yaml"
