@@ -1,6 +1,6 @@
 # Global Platform Modernization — DEMb Sample
 
-> Intentionally complex ~5K LOC enterprise sample that mirrors real-world technical and business complexity (scaled down from a ~2M LOC estate).  
+> Intentionally complex ~5K LOC enterprise sample that mirrors real-world technical and business complexity .
 > **Not** a best-practice reference architecture — debt, duplication, and brittle ops are deliberate for training and assessment.
 
 **Remote:** [vineeth-gl/global-platform-modernization](https://github.com/vineeth-gl/global-platform-modernization)
