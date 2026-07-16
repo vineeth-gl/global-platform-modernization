@@ -38,8 +38,8 @@ public class BillingApp {
             Map<String, Object> inv = LEDGER.createInvoice(modern);
             inv.put("inventory_probe", httpGet(INVENTORY + "/api/stock/check?sku=SKU-100"));
             inv.put("rating", rated);
-            httpPost(MONOLITH + "/api/v1/internal/billing-sync",
-                    mapOf("order_id", inv.get("order_id"), "status", "CHARGED_V1"));
+            Map<String, Object> syncBody = mapOf("order_id", inv.get("order_id"), "status", "CHARGED_V1");
+            httpPostSigned(MONOLITH + "/api/v1/internal/billing-sync", syncBody);
             return GSON.toJson(mapOf("Status", "OK", "InvoiceId", inv.get("id"), "Amount", inv.get("amount"), "raw", inv));
         });
 
@@ -57,8 +57,8 @@ public class BillingApp {
             modern.put("currency", str(body, "currency", "Cur", "USD"));
             modern.put("version", 2);
             Map<String, Object> inv = LEDGER.createInvoice(modern);
-            httpPost(MONOLITH + "/api/v1/internal/billing-sync",
-                    mapOf("order_id", inv.get("order_id"), "status", "PAID"));
+            Map<String, Object> syncBody = mapOf("order_id", inv.get("order_id"), "status", "PAID");
+            httpPostSigned(MONOLITH + "/api/v1/internal/billing-sync", syncBody);
             LEDGER.archiveAcme(AcmeCompat.fromModern(inv));
             inv.put("rating", rated);
             inv.put("cutover_compare", RatingEngine.compareV1V2(
@@ -129,8 +129,8 @@ public class BillingApp {
         return http("GET", url, null);
     }
 
-    private static Map<String, Object> httpPost(String url, Map<String, Object> body) {
-        return http("POST", url, body);
+    private static void httpPostSigned(String url, Map<String, Object> body) {
+        http("POST", url, body);
     }
 
     @SuppressWarnings("unchecked")
@@ -140,11 +140,17 @@ public class BillingApp {
             c.setRequestMethod(method);
             c.setConnectTimeout(2000);
             c.setReadTimeout(2000);
-            c.setRequestProperty("Content-Type", "application/json");
-            c.setRequestProperty("X-Legacy-Bypass", "1");
-            if (body != null) {
+            c.setRequestProperty("Authorization", "Bearer " + MeshAuth.serviceJwt());
+            String jsonBody = body != null ? GSON.toJson(body) : null;
+            if (jsonBody != null) {
                 c.setDoOutput(true);
-                c.getOutputStream().write(GSON.toJson(body).getBytes(StandardCharsets.UTF_8));
+                Map<String, String> wh = MeshAuth.webhookHeaders(jsonBody);
+                for (Map.Entry<String, String> h : wh.entrySet()) {
+                    c.setRequestProperty(h.getKey(), h.getValue());
+                }
+                c.getOutputStream().write(jsonBody.getBytes(StandardCharsets.UTF_8));
+            } else {
+                c.setRequestProperty("Content-Type", "application/json");
             }
             InputStream in = c.getResponseCode() >= 400 ? c.getErrorStream() : c.getInputStream();
             if (in == null) return new HashMap<String, Object>();

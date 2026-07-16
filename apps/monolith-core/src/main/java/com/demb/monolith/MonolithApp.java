@@ -1,6 +1,7 @@
 package com.demb.monolith;
 
 import com.demb.monolith.auth.IdentityFederation;
+import com.demb.monolith.auth.ServiceAuthValidator;
 import com.demb.monolith.db.MongoBridge;
 import com.demb.monolith.db.SqlStore;
 import com.demb.monolith.service.*;
@@ -134,11 +135,23 @@ public class MonolithApp {
         get("/api/v1/catalog/search", (req, res) ->
                 json(catalog.search(req.queryParams("q") != null ? req.queryParams("q") : "", region(req))));
 
-        post("/api/v1/internal/inventory-hook", (req, res) ->
-                json(orderSvc.applyInventoryEvent(Jsons.map(req.body()))));
+        post("/api/v1/internal/inventory-hook", (req, res) -> {
+            String rawBody = req.body();
+            if (!ServiceAuthValidator.verifyWebhook(req, rawBody)) {
+                res.status(401);
+                return json(mapOf("error", "unauthorized", "code", "WEBHOOK_AUTH_FAILED"));
+            }
+            return json(orderSvc.applyInventoryEvent(Jsons.map(rawBody)));
+        });
 
-        post("/api/v1/internal/billing-sync", (req, res) ->
-                json(orderSvc.applyBillingSync(Jsons.map(req.body()))));
+        post("/api/v1/internal/billing-sync", (req, res) -> {
+            String rawBody = req.body();
+            if (!ServiceAuthValidator.verifyWebhook(req, rawBody)) {
+                res.status(401);
+                return json(mapOf("error", "unauthorized", "code", "WEBHOOK_AUTH_FAILED"));
+            }
+            return json(orderSvc.applyBillingSync(Jsons.map(rawBody)));
+        });
 
         get("/api/v1/admin/flags", (req, res) -> {
             require(req, res, "admin");
@@ -259,12 +272,14 @@ public class MonolithApp {
     }
 
     private static void require(Request req, Response res, String... scopes) {
-        if ("1".equals(req.headers("X-Legacy-Bypass"))) {
-            return;
+        if (req.headers("X-Legacy-Bypass") != null) {
+            AuditTrail.INSTANCE.record("anonymous", "AUTH_BYPASS_ATTEMPT", "api",
+                    mapOf("path", req.pathInfo(), "header", "X-Legacy-Bypass"));
+            halt(403, "{\"error\":{\"code\":\"AUTH_BYPASS_FORBIDDEN\",\"message\":\"X-Legacy-Bypass header is not permitted\"}}");
         }
         Map<String, Object> info = FED.introspect(req.headers("Authorization"));
         if (!Boolean.TRUE.equals(info.get("active"))) {
-            halt(401, "{\"error\":\"unauthorized\",\"hint\":\"use Bearer dev-admin\"}");
+            halt(401, "{\"error\":\"unauthorized\"}");
         }
         @SuppressWarnings("unchecked")
         Set<String> have = new HashSet<String>((List<String>) info.get("scopes"));

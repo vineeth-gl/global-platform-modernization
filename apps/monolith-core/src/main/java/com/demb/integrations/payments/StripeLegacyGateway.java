@@ -1,5 +1,7 @@
 package com.demb.integrations.payments;
 
+import com.demb.monolith.Config;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.HashMap;
@@ -11,11 +13,11 @@ public class StripeLegacyGateway {
     private final String mode = "legacy_bridge";
 
     public StripeLegacyGateway() {
-        this("sk_test_51LegacyShopForgeBridge");
+        this(Config.STRIPE_KEY);
     }
 
     public StripeLegacyGateway(String apiKey) {
-        this.apiKey = apiKey;
+        this.apiKey = apiKey != null ? apiKey : "";
     }
 
     public Map<String, Object> chargeOrder(Map<String, Object> order) {
@@ -38,6 +40,9 @@ public class StripeLegacyGateway {
     }
 
     private String hmac(String payload) {
+        if (apiKey.isEmpty()) {
+            return "no-key";
+        }
         try {
             Mac mac = Mac.getInstance("HmacSHA256");
             mac.init(new SecretKeySpec(apiKey.getBytes("UTF-8"), "HmacSHA256"));

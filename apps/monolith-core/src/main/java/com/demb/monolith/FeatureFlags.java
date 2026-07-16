@@ -21,7 +21,10 @@ public class FeatureFlags {
         defTrue.put("default", true);
         cache.put("kafka_notify", defTrue);
         cache.put("rabbit_compat", defTrue);
-        cache.put("zero_trust_enforce", defFalse);
+        boolean zeroTrust = !"false".equalsIgnoreCase(Config.env("ZERO_TRUST_ENFORCE", "true"));
+        Map<String, Object> zeroTrustMap = new HashMap<String, Object>();
+        zeroTrustMap.put("default", zeroTrust);
+        cache.put("zero_trust_enforce", zeroTrustMap);
         cache.put("canary_inventory", defFalse);
         cache.put("blue_green_monolith", defTrue);
     }

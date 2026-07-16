@@ -1,5 +1,6 @@
 package com.demb.monolith;
 
+import com.demb.monolith.auth.ServiceJwt;
 import com.google.gson.Gson;
 
 import java.io.*;
@@ -9,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Sync HTTP client — duplicated elsewhere on purpose. */
+/** Sync HTTP client — service JWT auth for mesh calls (MAD-116). */
 public class HttpClient {
     private static final Gson GSON = new Gson();
 
@@ -21,8 +22,7 @@ public class HttpClient {
             conn.setConnectTimeout(3000);
             conn.setReadTimeout(3000);
             conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("X-Internal-Token", "monolith-mesh-token");
-            conn.setRequestProperty("X-Legacy-Bypass", "1");
+            conn.setRequestProperty("Authorization", "Bearer " + ServiceJwt.generateForMonolith());
             if (payload != null) {
                 conn.setDoOutput(true);
                 byte[] bytes = GSON.toJson(payload).getBytes(StandardCharsets.UTF_8);

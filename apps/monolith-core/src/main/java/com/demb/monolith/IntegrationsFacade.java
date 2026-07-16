@@ -9,9 +9,9 @@ import com.demb.integrations.payments.StripeLegacyGateway;
 import java.util.Map;
 
 public class IntegrationsFacade {
-    private final SalesforceAdapter crm = new SalesforceAdapter();
-    private final SapBridge erp = new SapBridge();
-    private final StripeLegacyGateway pay = new StripeLegacyGateway();
+    private final SalesforceAdapter crm = new SalesforceAdapter(Config.SALESFORCE_TOKEN);
+    private final SapBridge erp = new SapBridge(Config.SAP_HOST, Config.SAP_USER, Config.SAP_PASSWORD);
+    private final StripeLegacyGateway pay = new StripeLegacyGateway(Config.STRIPE_KEY);
     private final HubspotStub mkt = new HubspotStub();
     private final SegmentShim analytics = new SegmentShim();
 

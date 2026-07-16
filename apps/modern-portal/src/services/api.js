@@ -1,11 +1,16 @@
-// Modern portal API client — different naming than legacy portal
+// Modern portal API client — token from localStorage only (no hardcoded secrets)
 const API_BASE = window.MONOLITH_URL || "http://localhost:8080";
-const TOKEN = localStorage.getItem("dem_token") || "dev-admin";
+
+function getToken() {
+  return localStorage.getItem("dem_token") || "";
+}
 
 async function apiGet(path) {
+  const token = getToken();
+  if (!token) throw new Error("No API token — set localStorage.dem_token for local dev");
   const res = await fetch(API_BASE + path, {
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      Authorization: "Bearer " + token,
       "X-Region": localStorage.getItem("dem_region") || "eu-west",
     },
   });
@@ -14,10 +19,12 @@ async function apiGet(path) {
 }
 
 async function apiPost(path, body) {
+  const token = getToken();
+  if (!token) throw new Error("No API token — set localStorage.dem_token for local dev");
   const res = await fetch(API_BASE + path, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      Authorization: "Bearer " + token,
       "Content-Type": "application/json",
       "X-Region": localStorage.getItem("dem_region") || "eu-west",
     },

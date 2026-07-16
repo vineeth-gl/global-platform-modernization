@@ -1,5 +1,7 @@
 package com.demb.integrations.crm;
 
+import com.demb.monolith.Config;
+
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,11 +11,11 @@ public class SalesforceAdapter {
     private final String endpoint = "https://example--partial.my.salesforce.com/services/data/v42.0";
 
     public SalesforceAdapter() {
-        this("00Dxx0000000000!AQEAQLegacyCRM");
+        this(Config.SALESFORCE_TOKEN);
     }
 
     public SalesforceAdapter(String token) {
-        this.token = token;
+        this.token = token != null ? token : "";
     }
 
     public Map<String, Object> upsertOpportunity(Map<String, Object> order) {
@@ -29,7 +31,6 @@ public class SalesforceAdapter {
         out.put("ok", true);
         out.put("system", "salesforce");
         out.put("opportunity", doc);
-        out.put("_token_used", token != null);
         out.put("_endpoint", endpoint);
         return out;
     }

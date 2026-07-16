@@ -134,7 +134,7 @@ cd apps/svc-inventory && npm install && node server.js
 cd apps/svc-notify && npm install && node index.js
 ```
 
-**Auth token for local APIs:** `Authorization: Bearer dev-admin`
+**Auth token for local APIs:** Set `ALLOW_DEV_ADMIN=true` and `DEV_ADMIN_TOKEN=<your-token>` in the environment, then use `Authorization: Bearer <your-token>`. For portals, set `localStorage.dem_token` to the same value. See `.env.example` for all security-related variables (MAD-116).
 
 Step-by-step start/test guide: [`docs/START_TEST_AND_ISSUES.md`](docs/START_TEST_AND_ISSUES.md)
 

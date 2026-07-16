@@ -1,5 +1,6 @@
 version: "3.8"
 # Local hybrid stack — Java 8 monolith/billing/tax + Node inventory/notify
+# MAD-116: mesh secrets injected via environment (not in source)
 services:
   monolith-core:
     build:
@@ -10,11 +11,22 @@ services:
       INVENTORY_BASE_URL: http://svc-inventory:3001
       BILLING_BASE_URL: http://svc-billing:5001
       NOTIFY_BASE_URL: http://svc-notify:3002
+      SERVICE_JWT_SECRET: local-dev-service-jwt-secret
+      WEBHOOK_SECRET: local-dev-webhook-secret
+      JWT_SECRET: local-dev-jwt-secret
+      JWT_PUBLIC_KEY: local-dev-jwt-secret
+      ALLOW_DEV_ADMIN: "true"
+      DEV_ADMIN_TOKEN: local-dev-admin-token
+      ZERO_TRUST_ENFORCE: "true"
   svc-inventory:
     build: ./apps/svc-inventory
     ports: ["3001:3001"]
     environment:
       MONOLITH_URL: http://monolith-core:8080
+      SERVICE_JWT_SECRET: local-dev-service-jwt-secret
+      WEBHOOK_SECRET: local-dev-webhook-secret
+      ALLOW_DEV_ADMIN: "true"
+      DEV_ADMIN_TOKEN: local-dev-admin-token
   svc-billing:
     build:
       context: .
@@ -23,6 +35,8 @@ services:
     environment:
       MONOLITH_URL: http://monolith-core:8080
       INVENTORY_URL: http://svc-inventory:3001
+      SERVICE_JWT_SECRET: local-dev-service-jwt-secret
+      WEBHOOK_SECRET: local-dev-webhook-secret
   svc-notify:
     build: ./apps/svc-notify
     ports: ["3002:3002"]

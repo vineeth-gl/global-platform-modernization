@@ -4,9 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SapBridge {
-    private final String host = "erp-onprem.corp.internal";
-    private final String user = "RFC_DEMb";
-    private final String password = "SapRfc!2016"; // secret in code
+    private final String host;
+    private final String user;
+    private final String password;
+
+    public SapBridge() {
+        this("erp-onprem.corp.internal", "", "");
+    }
+
+    public SapBridge(String host, String user, String password) {
+        this.host = host != null ? host : "erp-onprem.corp.internal";
+        this.user = user != null ? user : "";
+        this.password = password != null ? password : "";
+    }
 
     public Map<String, Object> createDelivery(Map<String, Object> order) {
         int oid = order.get("id") instanceof Number ? ((Number) order.get("id")).intValue() : 0;
@@ -24,8 +34,6 @@ public class SapBridge {
         out.put("delivery", delivery);
         out.put("gl", gl);
         out.put("_host", host);
-        out.put("_user", user);
-        out.put("_password_set", password != null);
         return out;
     }
 

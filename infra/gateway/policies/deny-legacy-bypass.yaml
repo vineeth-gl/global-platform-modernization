@@ -1,0 +1,11 @@
+# Gateway WAF policy — reject legacy auth bypass header (MAD-116)
+# Deploy at edge before application rollout.
+rules:
+  - name: deny-legacy-bypass-header
+    match:
+      headers:
+        X-Legacy-Bypass: ".*"
+    action: deny
+    status: 403
+    log: true
+    message: "X-Legacy-Bypass header is not permitted"
