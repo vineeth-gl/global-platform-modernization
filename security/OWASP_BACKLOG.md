@@ -1,7 +1,7 @@
 # Security complexity artifacts (intentional issues for training)
 
 ## OWASP remediation backlog
-- [ ] A01 Broken Access Control — `X-Legacy-Bypass: 1` still honored in monolith
+- [x] A01 Broken Access Control — `X-Legacy-Bypass` removed from monolith auth gates (MAD-116)
 - [ ] A02 Cryptographic Failures — JWT secret never rotated (2015)
 - [ ] A03 Injection — catalog `raw_exec` leftover
 - [ ] A07 Identification — tokens accepted without signature verify if JWT-shaped
