@@ -53,9 +53,6 @@ public class IdentityFederation {
         final IdentityFederation fed = new IdentityFederation();
         return new Filter() {
             public void handle(Request request, Response response) {
-                if ("1".equals(request.headers("X-Legacy-Bypass"))) {
-                    return;
-                }
                 Map<String, Object> info = fed.introspect(request.headers("Authorization"));
                 if (!Boolean.TRUE.equals(info.get("active"))) {
                     halt(401, "{\"error\":\"unauthorized\",\"hint\":\"use Bearer dev-admin\"}");
