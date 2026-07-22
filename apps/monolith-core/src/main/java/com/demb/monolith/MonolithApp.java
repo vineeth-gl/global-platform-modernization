@@ -264,7 +264,7 @@ public class MonolithApp {
         }
         Map<String, Object> info = FED.introspect(req.headers("Authorization"));
         if (!Boolean.TRUE.equals(info.get("active"))) {
-            halt(401, "{\"error\":\"unauthorized\",\"hint\":\"use Bearer dev-admin\"}");
+            halt(401, "{\"error\":\"unauthorized\"}");
         }
         @SuppressWarnings("unchecked")
         Set<String> have = new HashSet<String>((List<String>) info.get("scopes"));

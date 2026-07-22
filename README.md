@@ -134,7 +134,8 @@ cd apps/svc-inventory && npm install && node server.js
 cd apps/svc-notify && npm install && node index.js
 ```
 
-**Auth token for local APIs:** `Authorization: Bearer dev-admin`
+**Auth token for local APIs:** generate a signed JWT with `JWT_SECRET` from the runtime secret store and send `Authorization: Bearer <token>`.
+For isolated local development only, `ALLOW_DEV_ADMIN=true` temporarily enables `Authorization: Bearer dev-admin`; keep this disabled in shared or deployed environments.
 
 Step-by-step start/test guide: [`docs/START_TEST_AND_ISSUES.md`](docs/START_TEST_AND_ISSUES.md)
 

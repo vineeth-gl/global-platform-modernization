@@ -1,5 +1,7 @@
 package com.demb.integrations.payments;
 
+import com.demb.monolith.Config;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.HashMap;
@@ -11,7 +13,7 @@ public class StripeLegacyGateway {
     private final String mode = "legacy_bridge";
 
     public StripeLegacyGateway() {
-        this("sk_test_51LegacyShopForgeBridge");
+        this(Config.STRIPE_KEY);
     }
 
     public StripeLegacyGateway(String apiKey) {

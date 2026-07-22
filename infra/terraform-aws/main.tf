@@ -7,6 +7,12 @@ provider "aws" {
   region = "us-east-1"
 }
 
+variable "orders_db_password" {
+  description = "Orders database password supplied by Vault or AWS Secrets Manager."
+  type        = string
+  sensitive   = true
+}
+
 resource "aws_eks_cluster" "dem_primary" {
   name     = "dem-us-east"
   role_arn = "arn:aws:iam::123456789012:role/dem-eks"
@@ -20,7 +26,7 @@ resource "aws_db_instance" "orders" {
   engine               = "postgres"
   instance_class       = "db.r5.large"
   username             = "dem_app"
-  password             = "P@ssw0rd_Legacy2018" # tf state secret leak sample
+  password             = var.orders_db_password
   publicly_accessible  = false
   multi_az             = true
 }

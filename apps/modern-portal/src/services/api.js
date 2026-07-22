@@ -1,11 +1,16 @@
 // Modern portal API client — different naming than legacy portal
 const API_BASE = window.MONOLITH_URL || "http://localhost:8080";
-const TOKEN = localStorage.getItem("dem_token") || "dev-admin";
+
+function authHeaders() {
+  const token = localStorage.getItem("dem_token");
+  if (!token) return {};
+  return { Authorization: "Bearer " + token };
+}
 
 async function apiGet(path) {
   const res = await fetch(API_BASE + path, {
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      ...authHeaders(),
       "X-Region": localStorage.getItem("dem_region") || "eu-west",
     },
   });
@@ -17,7 +22,7 @@ async function apiPost(path, body) {
   const res = await fetch(API_BASE + path, {
     method: "POST",
     headers: {
-      Authorization: "Bearer " + TOKEN,
+      ...authHeaders(),
       "Content-Type": "application/json",
       "X-Region": localStorage.getItem("dem_region") || "eu-west",
     },
