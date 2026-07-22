@@ -259,9 +259,6 @@ public class MonolithApp {
     }
 
     private static void require(Request req, Response res, String... scopes) {
-        if ("1".equals(req.headers("X-Legacy-Bypass"))) {
-            return;
-        }
         Map<String, Object> info = FED.introspect(req.headers("Authorization"));
         if (!Boolean.TRUE.equals(info.get("active"))) {
             halt(401, "{\"error\":\"unauthorized\",\"hint\":\"use Bearer dev-admin\"}");
