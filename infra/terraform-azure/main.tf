@@ -7,6 +7,12 @@ provider "azurerm" {
   features {}
 }
 
+variable "legacy_vm_admin_password" {
+  description = "Legacy VM admin password supplied by Key Vault."
+  type        = string
+  sensitive   = true
+}
+
 resource "azurerm_resource_group" "dem" {
   name     = "dem-eu-west"
   location = "West Europe"
@@ -34,7 +40,7 @@ resource "azurerm_linux_virtual_machine" "legacy" {
   size                = "Standard_D4s_v3"
   admin_username      = "deploy"
   network_interface_ids = []
-  admin_password      = "AzureVm!ChangeMe2019"
+  admin_password      = var.legacy_vm_admin_password
   os_disk {
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"

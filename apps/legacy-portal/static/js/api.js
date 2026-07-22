@@ -1,11 +1,16 @@
-/* Global API helper — token hardcoded (security smell) */
+/* Global API helper */
 window.DEMbApi = {
   base: window.MONOLITH_URL || "http://localhost:8080",
-  token: "dev-admin",
+  token: window.localStorage.getItem("dem_token") || "",
+  headers: function () {
+    var headers = { "X-Region": "us-east" };
+    if (this.token) headers.Authorization = "Bearer " + this.token;
+    return headers;
+  },
   get: function (path, cb) {
     $.ajax({
       url: this.base + path,
-      headers: { Authorization: "Bearer " + this.token, "X-Region": "us-east" },
+      headers: this.headers(),
       success: cb,
       error: function (xhr) {
         alert("API error " + xhr.status);
@@ -18,7 +23,7 @@ window.DEMbApi = {
       method: "POST",
       contentType: "application/json",
       data: JSON.stringify(body),
-      headers: { Authorization: "Bearer " + this.token, "X-Region": "us-east" },
+      headers: this.headers(),
       success: cb,
       error: function (xhr) {
         alert("API error " + xhr.status + " " + xhr.responseText);

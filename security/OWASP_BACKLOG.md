@@ -2,9 +2,9 @@
 
 ## OWASP remediation backlog
 - [ ] A01 Broken Access Control — `X-Legacy-Bypass: 1` still honored in monolith
-- [ ] A02 Cryptographic Failures — JWT secret never rotated (2015)
+- [x] A02 Cryptographic Failures — JWT secret loaded from runtime secret store and covered by rotation runbook
 - [ ] A03 Injection — catalog `raw_exec` leftover
-- [ ] A07 Identification — tokens accepted without signature verify if JWT-shaped
+- [x] A07 Identification — JWT-shaped tokens require HS256 signature verification
 - [ ] A08 Software integrity — outdated `requests==2.25.1`, `axios@0.21.1`
 
 ## Dependency vulnerabilities
@@ -13,11 +13,10 @@ Dependabot disabled after 2021 noise complaint.
 
 ## Secrets management
 Secrets appear in:
-- `apps/monolith-core/config.py`
-- terraform files
-- rabbit URL defaults
-- frontend `dev-admin` token
-Target: HashiCorp Vault / AWS SM — migration boarded then dropped.
+- runtime secret store environment injection
+- sensitive Terraform variables
+- `security/secrets.example.env` placeholders
+Target: HashiCorp Vault / AWS SM. See `docs/SECRET_ROTATION_RUNBOOK.md`.
 
 ## Identity federation & OAuth
 Okta + Azure AD + ShopForge local. See `auth_oauth_stub.py`.

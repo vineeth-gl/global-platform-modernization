@@ -1,7 +1,7 @@
 # Smoke examples (Java 8 monolith + Node services)
 
 ```bash
-export TOKEN=dev-admin
+export TOKEN="<signed-jwt-from-runtime-secret-store>"
 
 # Create order (monolith Java 8)
 curl -s -X POST http://localhost:8080/api/v1/orders \
