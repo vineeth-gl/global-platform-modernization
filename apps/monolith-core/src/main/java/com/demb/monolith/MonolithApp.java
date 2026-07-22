@@ -12,7 +12,7 @@ import java.util.*;
 import static spark.Spark.*;
 
 /**
- * DEMb Monolith Core — Java 8 / SparkJava
+ * DEMb Monolith Core - Java 8 / SparkJava
  * Legacy God-object style (acquired ShopForge core, 2012+).
  */
 public class MonolithApp {
@@ -56,6 +56,10 @@ public class MonolithApp {
                 "service", "monolith-core",
                 "runtime", "java8",
                 "ts", new Date().toInstant().toString())));
+
+        get("/api/integrations", (req, res) -> json(integrations.listConnectors()));
+
+        post("/api/integrations/:name/retry", (req, res) -> json(integrations.healConnector(req.params("name"))));
 
         get("/api/v1/orders", (req, res) -> {
             require(req, res, "orders:read");
@@ -281,7 +285,7 @@ public class MonolithApp {
         return attr(req, "region");
     }
 
-    /** Avoid String.valueOf(req.attribute(...)) — Spark's generic attribute() can bind to valueOf(char[]). */
+    /** Avoid String.valueOf(req.attribute(...)) - Spark's generic attribute() can bind to valueOf(char[]). */
     private static String attr(Request req, String key) {
         Object v = req.attribute(key);
         return v == null ? "" : v.toString();
@@ -303,3 +307,4 @@ public class MonolithApp {
         return m;
     }
 }
+
